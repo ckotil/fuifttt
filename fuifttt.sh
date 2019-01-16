@@ -6,12 +6,12 @@ for i in i80 us50 sr88; do
       if [[ -f /tmp/$i.closed ]];
         then echo mail\ already\ sent;
         else touch /tmp/$i.closed;
-          curl -s http://www.dot.ca.gov/hq/roadinfo/display.php?page=$i  | grep -i closed | tr -d \\r  | mailx $PHONENUMBER@vtext.com;
+          curl -s http://www.dot.ca.gov/hq/roadinfo/display.php?page=$i  | grep -i closed | awk -v i="$i" '{print 'i'$0}' | tr -d \\r  | mutt -s "$i" $PHONENUMBER;
       fi ;
     else echo $i opened; rm -f /tmp/$i.closed;
       if [[ -f /tmp/$i.open ]];
         then echo mail\ already\ sent;
-        else touch /tmp/$i.open; echo "$i Open\!" | tr -d \\r  | mailx $PHONENUMBER@vtext.com;
+        else touch /tmp/$i.open; echo "$i Open\!" | tr -d \\r  | mutt -s "$i" $PHONENUMBER;
       fi;
     fi;
  done
